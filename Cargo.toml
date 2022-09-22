@@ -1,0 +1,14 @@
+[package]
+name = "sigop"
+version = "0.1.0"
+authors = ["Luca Georges François <luca@quartz.technology>"]
+description = "A A tool to optimize your Solidity function signatures."
+repository = "https://github.com/quartz-technology/sigop"
+license-file = "LICENSE"
+keywords = ["solidity", "function-signature", "optimizer"]
+categories = ["command-line-utilities", "development-tools"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
