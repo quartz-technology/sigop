@@ -1,0 +1,51 @@
+name: "CI"
+
+on:
+  # Run this workflow every time there's a push on a PR targeting the "main" branch.
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+
+  # Run this workflow every time there's a push on the "main" branch.
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+
+    name: "Runs linter on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: "Clones the repository"
+        uses: actions/checkout@v3
+
+      - name: "Installs rustfmt and clippy"
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: "Runs the code formatter"
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --check
+
+      - name: "Runs the code analysis"
+        uses: actions-rs/clippy-check@v1
+        with:
+          args: --all --all-features -- -D warnings
+          token: ${{ secrets.GITHUB_TOKEN }}
