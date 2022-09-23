@@ -1,3 +1,4 @@
+use indicatif::ProgressBar;
 use itertools::Itertools;
 use log::{error, info};
 use rayon::prelude::*;
@@ -43,10 +44,15 @@ pub fn find_optimization(
     initial_function_name: &str,
     initial_function_parameters: &str,
     combinations: &Vec<String>,
+    suffix_length: u8,
     optimization_target: u8,
 ) {
+    let pb = ProgressBar::new(compute_maximum_number_of_combinations(64, suffix_length));
+
     // We use rayon to iterate in the combination in parallel.
     let suffix = combinations.par_iter().find_first(|&x| {
+        pb.inc(1);
+
         // Reconstructs the function's signature using the current combination.
         let mut new_function_signature = String::from(initial_function_name);
         new_function_signature.push_str(x);
@@ -69,6 +75,8 @@ pub fn find_optimization(
         found
     });
 
+    pb.finish_and_clear();
+
     match suffix {
         None => {
             error!("No optimization was found :(")
@@ -82,7 +90,6 @@ pub fn find_optimization(
     }
 }
 
-/*
 fn compute_maximum_number_of_combinations(dictionary_length: u64, suffix_length: u8) -> u64 {
     (1..=suffix_length)
         .into_iter()
@@ -90,6 +97,7 @@ fn compute_maximum_number_of_combinations(dictionary_length: u64, suffix_length:
         .sum()
 }
 
+/*
 fn compute_total_bytes_used(dictionary_length: u64, suffix_length: u8) -> u64 {
     (1..=suffix_length)
         .into_iter()

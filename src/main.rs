@@ -22,17 +22,12 @@ struct Cli {
     /// The number of zero-bytes you want to have at the beginning of the optimized function.
     #[clap(short, long, default_value_t = 2)]
     target: u8,
-
-    /// Prints a progression bar for iterations.
-    #[clap(short, long, action)]
-    debug: bool,
 }
 
 fn run(
     function_signature: &str,
     suffix_length: u8,
     optimization_target: u8,
-    _debug: bool,
 ) -> Result<(), Report<PreProcessError>> {
     let mut function = try_preprocess(function_signature)?;
     let combinations = build_combinations(suffix_length);
@@ -42,6 +37,7 @@ fn run(
         function.name.as_str(),
         function.params.as_str(),
         &combinations,
+        suffix_length,
         optimization_target,
     );
 
@@ -57,7 +53,7 @@ fn main() {
 
     let cli = Cli::parse();
 
-    match run(cli.signature.as_str(), cli.length, cli.target, cli.debug) {
+    match run(cli.signature.as_str(), cli.length, cli.target) {
         Ok(_) => {}
         Err(err) => match err.current_context() {
             PreProcessError::InvalidFunctionSignatureParenthesis(msg) => {
