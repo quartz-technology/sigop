@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use log::{error, info};
 use rayon::prelude::*;
 use sha3::{Digest, Keccak256};
 
@@ -68,7 +69,17 @@ pub fn find_optimization(
         found
     });
 
-    println!("{:?}", suffix.unwrap())
+    match suffix {
+        None => {
+            error!("No optimization was found :(")
+        }
+        Some(opt) => {
+            info!(
+                "Found this optimization: {}{}{}",
+                initial_function_name, opt, initial_function_parameters
+            )
+        }
+    }
 }
 
 /*
