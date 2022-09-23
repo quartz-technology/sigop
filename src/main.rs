@@ -34,7 +34,7 @@ fn main() {
     builder.parse_default_env();
     builder.init();
 
-    let function_signature = "myFunction(address";
+    let function_signature = "myFunction(address)";
     let suffix_length = 4;
     let optimization_target = 3;
 
