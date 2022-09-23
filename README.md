@@ -16,7 +16,12 @@ specified number of zeros at the beginning, the optimization has been found.
 
 ### ⚙️ Installation
 
-Building from source:
+Installing from cargo:
+```shell
+cargo install sigop
+```
+
+Or building locally from source:
 ```shell
 make build-release
 ```
